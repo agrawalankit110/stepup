@@ -15,12 +15,10 @@ jobs:
           - name: frontend
             context: ./kaam_webapp
             dockerfile: ./kaam_webapp/Dockerfile
-            tag: agrawalankit110/stepup:frontend_${{ env.BUILD_NUMBER }}
           - name: backend
             context: ./kaam-backend
             dockerfile: ./kaam-backend/Dockerfile
-            tag: agrawalankit110/stepup:backend_${{ env.BUILD_NUMBER }}
-
+            
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -36,7 +34,7 @@ jobs:
 
     - name: Build and push ${{ matrix.name }} image
       run: |
-        IMAGE_TAG="agrawalankit110/stepup:${{ matrix.name }}_v_${{ github.run_number }}"
+        IMAGE_TAG="agrawalankit110/stepup:${{ matrix.name }}_v${{ github.run_number }}"
         echo "Building and pushing $IMAGE_TAG"
         docker build -f ${{ matrix.dockerfile }} ${{ matrix.context }} -t $IMAGE_TAG
         docker push $IMAGE_TAG
