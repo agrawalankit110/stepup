@@ -8,17 +8,21 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      BUILD_NUMBER: ${{ github.run_number }}
+      COMMIT_SHA: ${{ github.sha }}
+
     strategy:
       matrix:
         include:
           - name: frontend
             context: ./kaam_webapp
             dockerfile: ./kaam_webapp/Dockerfile
-            tag: agrawalankit110/stepup:frontend_v1
+            tag: agrawalankit110/stepup:frontend_${{ env.BUILD_NUMBER }}
           - name: backend
             context: ./kaam-backend
             dockerfile: ./kaam-backend/Dockerfile
-            tag: agrawalankit110/stepup:backend_v1
+            tag: agrawalankit110/stepup:backend_${{ env.BUILD_NUMBER }}
 
     steps:
     - name: Checkout code
