@@ -8,9 +8,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      BUILD_NUMBER: ${{ github.run_number }}
-      COMMIT_SHA: ${{ github.sha }}
 
     strategy:
       matrix:
@@ -38,9 +35,8 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build and push ${{ matrix.name }} image
-      uses: docker/build-push-action@v5
-      with:
-        context: ${{ matrix.context }}
-        file: ${{ matrix.dockerfile }}
-        push: true
-        tags: ${{ matrix.tag }}
+      run: |
+        IMAGE_TAG="agrawalankit110/stepup:${{ matrix.name }}_v_${{ github.run_number }}"
+        echo "Building and pushing $IMAGE_TAG"
+        docker build -f ${{ matrix.dockerfile }} ${{ matrix.context }} -t $IMAGE_TAG
+        docker push $IMAGE_TAG
